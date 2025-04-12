@@ -1,0 +1,134 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ff7a18, #af002d, #3204b2);
+    background-size: 400% 400%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+    animation: backgroundAnimation 10s ease infinite;
+}
+
+/* Animation for background gradient */
+@keyframes backgroundAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Container styling */
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+    padding: 40px 60px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    width: 80%;
+    max-width: 600px;
+}
+
+/* Title slow typing effect */
+.slow-text {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 4px solid #333;
+    animation: typing 5s steps(30) 1s 1 normal both;
+}
+
+/* Typing effect animation */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 25ch; /* Adjust this to match your text's length */
+    }
+}
+
+/* Blinking cursor effect */
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Button styling */
+.btn-primary {
+    text-decoration: none;
+    padding: 15px 30px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 30px;
+    margin-top: 30px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(2px);
+}
+
+.spacer {
+    height: 50px;
+    width: 50px; /* Adjust this height as needed */
+}
+/* Additional Styling for Responsiveness */
+@media (max-width: 600px) {
+    .slow-text {
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 30px;
+    }
+
+    .btn-primary {
+        padding: 12px 25px;
+    }
+}
+
+a {
+    text-decoration: none; /* Remove underline from the link */
+    color: inherit; /* Make the link color inherit from its parent */
+}
+
+.slow-text {
+    font-size: 36px;
+    color: #333;
+    text-align: center;
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+
+.slow-text:hover {
+    color: #ffffff; /* Change color on hover */
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+
+    <!-- Link to Google Fonts for stylish heading -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e8f5e9, #78c27a); /* Gradient Background */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Container for Login */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Heading Styles */
+        .container h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .container p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus,
+        .input-group input[type="password"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        /* Remember Checkbox */
+        .input-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .input-group label[for="remember"] {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Submit Button */
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-3px); /* Button lift on hover */
+        }
+
+        button:active {
+            transform: translateY(1px); /* Button goes down when clicked */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SRI SHAKTHI</h1>
+        <p>INSTITUTE OF ENGINEERING AND TECHNOLOGY</p>
+        <p>Teacher Login</p>
+        <form id="teacher-login-form">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="input-group">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember username</label>
+            </div>
+            <button type="submit">Log in</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('teacher-login-form').addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent form from reloading the page
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Assuming dynamic login, just redirect to teacher dashboard
+            if (username && password) {
+                // Redirect to teacher dashboard if username and password are filled
+                window.location.href = 'teacher.html';  // Assuming the teacher dashboard is in teacher_dashboard.html
+            } else {
+                alert('Please enter both username and password');
+            }
+        });
+    </script>
+
+</body>
+</html>

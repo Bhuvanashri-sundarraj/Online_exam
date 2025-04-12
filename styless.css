@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #282c34;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.slider {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    text-align: center;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+.services-btn {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.navigation {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px;
+}

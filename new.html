@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIET LMS Student Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: #333;
+        }
+
+        .main-content {
+            padding: 40px;
+            background-color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 50px;
+            min-height: 100vh;
+        }
+
+        h3 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #2e8b57;
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            color: red;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .course-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card h4 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .course-card p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .course-card button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .course-card button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .test-card {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .test-card p {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .test-card label {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .test-card input[type="radio"] {
+            margin: 10px 10px 10px 0;
+        }
+
+        .test-card button {
+            background-color: #2e8b57;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .test-card button:hover {
+            background-color: #228b22;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-card button,
+            .test-card button {
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <h3>Student Dashboard</h3>
+        <div class="course-grid">
+            <div class="course-card">
+                <h4>Test: ITVAC Training</h4>
+                <p>CTPS</p>
+                <button onclick="takeTest('CTPS')">Take Test</button>
+            </div>
+            <div class="course-card">
+                <h4>Test: ITVAC Training</h4>
+                <p>PDS</p>
+                <button onclick="takeTest('PDS')">Take Test</button>
+            </div>
+            <div class="course-card">
+                <h4>Test: ITVAC Training</h4>
+                <p>ITES</p>
+                <button onclick="takeTest('ITES')">Take Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft = 600;
+        let isTestStarted = false;
+        let testType;
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden && isTestStarted) {
+                alert("Malpractice detected! You switched tabs during the test.");
+                submitTest(true);
+            }
+        });
+
+        function startTimer() {
+            const timerElement = document.querySelector('.timer');
+            timer = setInterval(function () {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    alert('Time is up! The test will be submitted automatically.');
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function takeTest(selectedTestType) {
+            isTestStarted = true;
+            testType = selectedTestType;
+
+            const questions = JSON.parse(localStorage.getItem('questions')) || [];
+            const testQuestions = questions.filter(q => q.testTitle === testType);
+
+            if (testQuestions.length === 0) {
+                alert('No questions available for this test.');
+                return;
+            }
+
+            let testHtml = `<h3>Test: ${testType}</h3><div class="timer">Time Left: 10:00</div><form id="test-form">`;
+            testQuestions.forEach((q, index) => {
+                testHtml += `
+                    <div class="test-card">
+                        <p>${index + 1}. ${q.questionText}</p>
+                        <label>
+                            <input type="radio" name="q${index}" value="option1"> Option 1: ${q.option1}
+                        </label><br>
+                        <label>
+                            <input type="radio" name="q${index}" value="option2"> Option 2: ${q.option2}
+                        </label><br>
+                        <label>
+                            <input type="radio" name="q${index}" value="option3"> Option 3: ${q.option3}
+                        </label><br>
+                        <label>
+                            <input type="radio" name="q${index}" value="option4"> Option 4: ${q.option4}
+                        </label>
+                    </div>
+                `;
+            });
+
+            testHtml += `<button type="button" onclick="submitTest()">Submit Test</button></form>`;
+            document.querySelector('.main-content').innerHTML = testHtml;
+
+            startTimer();
+        }
+
+        function submitTest(isMalpractice = false) {
+            const questions = JSON.parse(localStorage.getItem('questions')) || [];
+            const testQuestions = questions.filter(q => q.testTitle === testType);
+            let score = 0;
+
+            if (isMalpractice) {
+                alert('Malpractice detected! Test submitted automatically.');
+            } else {
+                testQuestions.forEach((q, index) => {
+                    const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                    if (selectedOption && selectedOption.value === q.correctAnswer) {
+                        score++;
+                    }
+                });
+
+                alert(`You have completed the test! Your score is ${score} out of ${testQuestions.length}.`);
+            }
+
+            document.querySelector('.main-content').innerHTML = `
+                <h3>Test Completed!</h3>
+                <p>Your score: ${score} out of ${testQuestions.length}</p>
+                <button onclick="returnToDashboard()">Return to Dashboard</button>
+            `;
+
+            clearInterval(timer);
+            isTestStarted = false;
+            timeLeft = 600;
+        }
+
+        function returnToDashboard() {
+            window.location.reload();
+        }
+    </script>
+
+</body>
+</html>
