@@ -292,15 +292,16 @@
 
     const username = localStorage.getItem("studentUsername") || "unknown_student";
     const scores = JSON.parse(localStorage.getItem("studentScores")) || [];
-    const existingIndex = scores.findIndex(s => s.username === username);
-
     const scoreObj = { username, score: mark, testType };
-    if (existingIndex >= 0) {
-      scores[existingIndex] = scoreObj;
-    } else {
-      scores.push(scoreObj);
-    }
-    localStorage.setItem("studentScores", JSON.stringify(scores));
+const existingIndex = scores.findIndex(s => s.username === username && s.testType === testType);
+
+if (existingIndex >= 0) {
+  scores[existingIndex] = scoreObj;  // update only that test's score
+} else {
+  scores.push(scoreObj);  // add new test score
+}
+localStorage.setItem("studentScores", JSON.stringify(scores));
+
 
     document.getElementById('dashboard').innerHTML = `
       <h3>Test Completed!</h3>
