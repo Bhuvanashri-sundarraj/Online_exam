@@ -3,78 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SIET LMS Teacher Dashboard</title>
+  <title>SIET Teacher Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
   <style>
+    .score-section {
+      margin-top: 30px;
+    }
+    .student-score {
+      background: #ffffff;
+      border: 2px solid #a5d6a7;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0px 0px 8px #c8e6c9;
+    }
+    .student-name {
+      font-weight: bold;
+      color: #1b5e20;
+      font-size: 18px;
+    }
+    .attempt-details {
+      margin-left: 10px;
+      margin-top: 10px;
+    }
+    .attempt {
+      margin-bottom: 8px;
+      padding: 8px;
+      border: 1px dashed #81c784;
+      border-radius: 8px;
+      background-color: #f1f8e9;
+    }
+    .label {
+      font-weight: bold;
+      color: #388e3c;
+    }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
       background: linear-gradient(to right, #2ecc71, #27ae60);
-      color: #333;
-    }
-    h3 {
-      font-size: 2.5rem;
-      margin-top: 20px;
-      color: #fff;
-      text-align: center;
+      min-height: 100vh;
     }
     .main-content {
+      background: #fff;
       padding: 30px;
-      background-color: #fff;
-      border-radius: 12px;
-      margin: 40px auto;
-      width: 90%;
+      margin: 30px auto;
+      border-radius: 15px;
       max-width: 1000px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
-    h4 {
-      font-size: 1.6rem;
-      color: #27ae60;
+    h3, h4 {
       text-align: center;
-      margin-bottom: 20px;
+      color: #2c3e50;
+      margin-top: 20px;
     }
-    .question-card {
-      background: #f4fff2;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    input, textarea, select {
+    form, input, textarea, select, button {
       width: 100%;
       margin: 10px 0;
-      padding: 12px;
+      padding: 10px;
       border-radius: 8px;
-      border: 1px solid #ccc;
       font-size: 1rem;
+      border: 1px solid #ccc;
     }
     button {
-      background: #2ecc71;
+      background-color: #27ae60;
       color: white;
-      padding: 12px 20px;
       border: none;
-      border-radius: 6px;
-      font-size: 1rem;
       cursor: pointer;
-      margin: 8px 4px;
     }
     button:hover {
-      background: #27ae60;
+      background-color: #229954;
     }
-    .question-table {
+    table {
       width: 100%;
-      margin-top: 30px;
       border-collapse: collapse;
+      margin-top: 30px;
     }
-    .question-table th, .question-table td {
+    th, td {
       padding: 14px;
       border: 1px solid #ddd;
-      text-align: left;
+      text-align: center;
     }
-    .question-table th {
+    th {
       background: #27ae60;
       color: white;
     }
-    .question-table td {
+    td {
       background: #f0fff4;
     }
     .delete-btn {
@@ -83,16 +97,24 @@
     .delete-btn:hover {
       background-color: #c0392b;
     }
+    .pass {
+      color: green;
+      font-weight: bold;
+    }
+    .fail {
+      color: red;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <h3>📋 Teacher Dashboard</h3>
   <div class="main-content">
-    <div class="question-card" id="add-question-form">
-      <h4>🎓 Create a New Question</h4>
+    <h4>🎓 Create a New Question</h4>
+    <form id="add-question-form">
       <input type="text" id="test-title" placeholder="Test Title (e.g., CTPS)" />
-      <input type="number" id="test-duration" placeholder="Test Duration (minutes)" min="1" />
-      <input type="number" id="total-questions" placeholder="Number of Questions in Set" min="1" />
+      <input type="number" id="test-duration" placeholder="Test Duration (minutes)" />
+      <input type="number" id="total-questions" placeholder="Number of Questions in Set" />
       <textarea id="question" placeholder="Enter question"></textarea>
       <input type="text" id="option1" placeholder="Option 1" />
       <input type="text" id="option2" placeholder="Option 2" />
@@ -105,11 +127,11 @@
         <option value="option3">Option 3</option>
         <option value="option4">Option 4</option>
       </select>
-      <button onclick="addQuestion()">Add Question</button>
-    </div>
+      <button type="button" onclick="addQuestion()">Add Question</button>
+    </form>
 
     <h4>📄 Existing Questions</h4>
-    <table class="question-table" id="question-table">
+    <table>
       <thead>
         <tr>
           <th>#</th>
@@ -121,76 +143,37 @@
       </thead>
       <tbody id="question-body"></tbody>
     </table>
+
+    <h4>📊 Student Scores</h4>
+    <button onclick="downloadCSV()">Download CSV</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Test</th>
+          <th>Score</th>
+          <th>Status</th>
+          <th>Mark</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody id="score-body"></tbody>
+    </table>
+
+    <div class="score-section" id="scoreSection"></div>
   </div>
 
-  <h4>📊 Student Scores</h4>
-<table class="question-table" id="student-table">
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Score</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
-<script>
-function loadStudents() {
-  fetch("TeacherViewServlet")
-    .then(res => res.json())
-    .then(data => {
-      const table = document.querySelector("#student-table tbody");
-      table.innerHTML = "";
-      data.forEach((s) => {
-        table.innerHTML += `
-          <tr>
-            <td>${s.username}</td>
-            <td>${s.score}</td>
-            <td>${s.status}</td>
-            <td>
-              <button onclick="markStudent('${s.username}', 'Pass')">✅ Pass</button>
-              <button onclick="markStudent('${s.username}', 'Fail')">❌ Fail</button>
-            </td>
-          </tr>`;
-      });
-    });
-}
-
-function markStudent(username, status) {
-  fetch("TeacherViewServlet", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ username, status })
-  })
-  .then(res => res.text())
-  .then(alert)
-  .then(loadStudents); // Refresh table
-}
-
-window.onload = () => {
-  loadQuestions(); // your existing question loader
-  loadStudents();  // new addition
-};
-</script>
-
   <script>
-    function loadQuestions() {
-      const questions = JSON.parse(localStorage.getItem("questions")) || [];
-      const table = document.getElementById("question-body");
-      table.innerHTML = "";
-      questions.forEach((q, i) => {
-        const row = `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${q.testTitle}</td>
-            <td>${q.questionText}</td>
-            <td>${q[q.correctAnswer]}</td>
-            <td><button class="delete-btn" onclick="deleteQuestion(${i})">Delete</button></td>
-          </tr>`;
-        table.innerHTML += row;
-      });
+    const token = localStorage.getItem('token');
+    const loginId = localStorage.getItem('login_id');
+    if (!token || !loginId) {
+      alert("🔒 Please login first.");
+      window.location.href = "teacherlog.html";
+    }
+
+    function formatTime(isoString) {
+      const date = new Date(isoString);
+      return date.toLocaleString();
     }
 
     function addQuestion() {
@@ -216,20 +199,33 @@ window.onload = () => {
         option2: o2,
         option3: o3,
         option4: o4,
-        correctAnswer: correct,
+        correctAnswer: correct
       };
 
       const questions = JSON.parse(localStorage.getItem("questions")) || [];
       questions.push(question);
       localStorage.setItem("questions", JSON.stringify(questions));
-
-      // Save duration and count for this test title
       localStorage.setItem(`duration_${title}`, duration * 60);
       localStorage.setItem(`count_${title}`, count);
 
       alert("✅ Question added!");
       document.getElementById("add-question-form").reset();
       loadQuestions();
+    }
+
+    function loadQuestions() {
+      const questions = JSON.parse(localStorage.getItem("questions")) || [];
+      const table = document.getElementById("question-body");
+      table.innerHTML = "";
+      questions.forEach((q, i) => {
+        table.innerHTML += `<tr>
+          <td>${i + 1}</td>
+          <td>${q.testTitle}</td>
+          <td>${q.questionText}</td>
+          <td>${q[q.correctAnswer]}</td>
+          <td><button class='delete-btn' onclick='deleteQuestion(${i})'>Delete</button></td>
+        </tr>`;
+      });
     }
 
     function deleteQuestion(index) {
@@ -239,19 +235,88 @@ window.onload = () => {
       loadQuestions();
     }
 
-    window.onload = loadQuestions;
-    function markStudent(username, status) {
-  fetch('markStudent', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({ username, status })
-  })
-  .then(res => res.text())
-  .then(data => alert(data));
-}
+    function loadScores() {
+      const scores = JSON.parse(localStorage.getItem("studentScores")) || [];
+      const table = document.getElementById("score-body");
+      table.innerHTML = "";
+      scores.forEach((entry, i) => {
+        table.innerHTML += `<tr>
+          <td>${entry.username}</td>
+          <td>${entry.testType}</td>
+          <td>${entry.score}</td>
+          <td class="${entry.status}">${entry.status || '-'}</td>
+          <td><button onclick="markStatus(${i}, 'pass')">Pass</button><button onclick="markStatus(${i}, 'fail')">Fail</button></td>
+          <td><button class='delete-btn' onclick='removeScore(${i})'>Delete</button></td>
+        </tr>`;
+      });
 
+      // Grouped attempt display
+      const grouped = {};
+      scores.forEach(score => {
+        if (!grouped[score.username]) grouped[score.username] = [];
+        grouped[score.username].push(score);
+      });
+
+      const section = document.getElementById("scoreSection");
+      section.innerHTML = ""; // Clear previous content
+      for (const username in grouped) {
+        const attempts = grouped[username];
+        const studentDiv = document.createElement("div");
+        studentDiv.className = "student-score";
+
+        studentDiv.innerHTML = `<div class="student-name">Student Roll Number: ${username}</div><div class="attempt-details"></div>`;
+
+        const detailsDiv = studentDiv.querySelector(".attempt-details");
+        attempts.forEach((attempt, index) => {
+          const attemptDiv = document.createElement("div");
+          attemptDiv.className = "attempt";
+          attemptDiv.innerHTML = `
+            <div><span class="label">Attempt #${index + 1}</span></div>
+            <div><span class="label">Test Type:</span> ${attempt.testType}</div>
+            <div><span class="label">Score:</span> ${attempt.score}</div>
+            <div><span class="label">Status:</span> ${attempt.status || '-'}</div>
+            <div><span class="label">Time:</span> ${formatTime(attempt.timestamp)}</div>
+          `;
+          detailsDiv.appendChild(attemptDiv);
+        });
+
+        section.appendChild(studentDiv);
+      }
+    }
+
+    function markStatus(index, status) {
+      const scores = JSON.parse(localStorage.getItem("studentScores")) || [];
+      scores[index].status = status;
+      localStorage.setItem("studentScores", JSON.stringify(scores));
+      loadScores();
+    }
+
+    function removeScore(index) {
+      const scores = JSON.parse(localStorage.getItem("studentScores")) || [];
+      scores.splice(index, 1);
+      localStorage.setItem("studentScores", JSON.stringify(scores));
+      loadScores();
+    }
+
+    function downloadCSV() {
+      const scores = JSON.parse(localStorage.getItem("studentScores")) || [];
+      let csv = "Username,Test,Score,Status\n";
+      scores.forEach(entry => {
+        csv += `${entry.username},${entry.testType},${entry.score},${entry.status || '-'}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "student_scores.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    window.onload = () => {
+      loadQuestions();
+      loadScores();
+    };
   </script>
 </body>
 </html>
