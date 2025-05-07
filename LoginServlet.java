@@ -1,41 +1,67 @@
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
+
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        res.setContentType("application/json");
+        PrintWriter out = res.getWriter();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        // Read JSON input from frontend
+        BufferedReader reader = req.getReader();
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/student_portal", "root", "Bhava@0503");
+        // Parse JSON and extract loginId and password
+        JSONObject json = new JSONObject(sb.toString());
+        String loginId = json.getString("loginId");
+        String password = json.getString("password");
 
-            PreparedStatement ps = con.prepareStatement(
-                "SELECT * FROM users WHERE username=? AND password=?");
-            ps.setString(1, username);
-            ps.setString(2, password);
+        try (Connection conn = getConnection()) {
+            String query = "SELECT * FROM logins WHERE login_id = ? AND password = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, loginId);
+            pst.setString(2, password);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                // Store session for progress tracking later
-                HttpSession session = request.getSession();
-                session.setAttribute("username", username);
-                response.sendRedirect("cam.html"); // success
+                // Credentials are valid
+                out.print("{ \"status\": \"success\", \"message\": \"Login successful\" }");
             } else {
-                PrintWriter out = response.getWriter();
-                out.println("<script>alert('Invalid credentials'); window.location='login.html';</script>");
+                // Credentials are invalid
+                res.setStatus(401);
+                out.print("{ \"status\": \"error\", \"message\": \"Invalid login ID or password\" }");
             }
 
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
+            res.setStatus(500);
+            out.print("{ \"status\": \"error\", \"message\": \"Server error\" }");
         }
+    }
+
+    private Connection getConnection() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/onlineexam";
+        String user = "root";
+        String pass = "Bhuvana@4000";
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(url, user, pass);
     }
 }
