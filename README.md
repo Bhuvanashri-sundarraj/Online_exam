@@ -1,6 +1,8 @@
 # 🛡️ SIET Online Examination Portal
 A Secure, AI-Enhanced Solution for Modern Digital Assessments
 <br>
+Deployment link : online-exam-72zp61a58-bhuvanashri-sks-projects.vercel.app
+<br><hr>
 # 📘 Overview
 The SIET Online Examination Portal is a robust web-based system built to meet the evolving demands of digital education. It addresses critical concerns around exam integrity, real-time monitoring, and fair evaluation in remote learning environments.
 Built with intelligent proctoring and intuitive design, it empowers institutions to conduct exams that are not only secure but scalable, inclusive, and user-friendly.
